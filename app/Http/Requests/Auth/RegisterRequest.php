@@ -4,7 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,20 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|string|email',
-            'password' => 'required|string',
+            'name' => 'required|string|max:30|min:6',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
         ];
     }
 
     public function messages(): array
     {
         return [
+            'name.required' => 'Nama wajib diisi.',
+            'name.string' => 'Nama harus berupa teks.',
+            'name.max' => 'Nama tidak boleh lebih dari 30 karakter.',
+            'name.min' => 'Nama harus memiliki minimal 6 karakter.',
+
             'email.required' => 'Email wajib diisi.',
             'email.string' => 'Email harus berupa teks.',
             'email.email' => 'Format email tidak valid.',

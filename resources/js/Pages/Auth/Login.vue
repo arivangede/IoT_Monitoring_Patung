@@ -1,43 +1,79 @@
-<script setup lang="ts">
-import AuthForm from "@/Components/Auth/AuthForm.vue";
+<script setup lang="js">
+import Alert from "@/Components/Alert.vue";
+import Card from "@/Components/Card.vue";
+import TextInput from "@/Components/form/TextInput.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
+
+const { props } = usePage();
+console.log(props)
+
+const form = useForm({
+    email: "",
+    password: ''
+})
+
+const submitForm = () => {
+    form.post(route('login'), {
+        onError: () => {
+            form.reset('password')
+        }
+    })
+}
 </script>
 
 <template>
     <Head title="Login" />
-
     <GuestLayout>
-        <div
-            class="flex flex-col justify-center items-center w-full max-w-screen-lg"
-        >
-            <AuthForm>
-                <h1 class="font-semibold text-xl">Login</h1>
+        <Alert :alert-data="form.errors" />
 
-                <div>
-                    <label for="username" class="ml-3">Username</label>
-                    <input
-                        type="text"
-                        placeholder="Username / Email"
-                        class="input input-bordered w-full max-w-sm"
-                    />
-                </div>
-                <div>
-                    <label for="password" class="ml-3">Password</label>
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        class="input input-bordered w-full max-w-sm"
-                    />
-                </div>
-            </AuthForm>
+        <Card :transparent="true">
+            <form
+                @submit.prevent="submitForm"
+                class="flex flex-col justify-center items-center gap-5"
+            >
+                <h1 class="card-title">Login</h1>
 
-            <p class="text-primary">
-                Belum Punya Akun?
-                <Link href="#" class="underline font-semibold"
-                    >Daftar Sekarang</Link
-                >
-            </p>
-        </div>
+                <TextInput
+                    type="email"
+                    icon="pi-envelope"
+                    v-model="form.email"
+                    placeholder="Email"
+                    :error="form.errors.error"
+                    :required="true"
+                />
+                <TextInput
+                    type="password"
+                    icon="pi-lock"
+                    v-model="form.password"
+                    placeholder="Password"
+                    :error="form.errors.error"
+                    :required="true"
+                />
+
+                <div class="w-full flex items-center justify-center mt-4">
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-40"
+                        :disabled="form.processing"
+                    >
+                        <span
+                            class="loading loading-bars loading-md"
+                            v-if="form.processing"
+                        ></span>
+                        <span v-else>Submit</span>
+                    </button>
+                </div>
+
+                <p class="text-primary">
+                    Belum Punya Akun?
+                    <Link
+                        :href="route('register')"
+                        class="underline font-semibold"
+                        >Daftar Sekarang</Link
+                    >
+                </p>
+            </form>
+        </Card>
     </GuestLayout>
 </template>
