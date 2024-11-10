@@ -1,6 +1,8 @@
 <?php
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\UserSettingsController;
 use Illuminate\Support\Facades\Route;
 
 // Redirect root to dashboard or login based on authentication
@@ -11,14 +13,16 @@ Route::get('/', function () {
 // Route protected by auth and verify middleware
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/notifications', [NotificationsController::class, 'index'])->name('notifications');
+    Route::get('/user-settings', [UserSettingsController::class, 'index'])->name('user-settings');
 });
 
 // Route protected by auth middleware
 Route::middleware('auth')->group(function () {
     Route::get('/verify-email', [AuthController::class, 'verifyindex'])->name('verify.email.notice');
     Route::get('/verify-email/{id}/{hash}', [AuthController::class, 'verify'])
-    ->middleware(['signed', 'throttle:6,1'])
-    ->name('verify.email.request');
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verify.email.request');
     Route::post('/verify-email/send-email', [AuthController::class, 'resendVerificationEmail'])
         ->name('verify.email.send');
 

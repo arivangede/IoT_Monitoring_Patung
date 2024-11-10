@@ -13,7 +13,6 @@ const state = reactive({
 const alertMessage = ref(props.flash.success || '')
 const alertType = ref(props.flash.success ? 'success' : '')
 
-// Function to handle logout
 const handleLogout = () => {
     state.logout_processing = true
 
