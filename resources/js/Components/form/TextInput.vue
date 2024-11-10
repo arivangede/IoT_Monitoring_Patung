@@ -27,7 +27,11 @@ const props = defineProps({
         type: String,
         default: ''
     },
-    showErrorMessage:{
+    showErrorMessage: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     }
@@ -40,25 +44,12 @@ const errorMessage = computed(() => props.error)
 
 <template>
     <div class="flex flex-col w-full gap-2">
-        <label
-            :class="`input input-bordered flex items-center gap-2 ${
-                errorMessage && 'input-error'
-            }`"
-        >
+        <label :class="`input input-bordered flex items-center gap-2 ${errorMessage && 'input-error'
+            } ${disabled && 'btn-disabled'}`">
             <i v-if="icon" :class="`pi ${icon}`"></i>
-            <input
-                class="grow border-none focus:ring-0"
-                :type="type"
-                :placeholder="placeholder"
-                :value="modelValue"
-                :required="required"
-                @input="$emit('update:modelValue', $event.target.value)"
-            />
+            <input class="grow border-none focus:ring-0" :type="type" :placeholder="placeholder" :value="modelValue"
+                :required="required" @input="$emit('update:modelValue', $event.target.value)" />
         </label>
-        <span
-            v-if="errorMessage && showErrorMessage"
-            class="text-error text-xs pl-4"
-            >{{ errorMessage }}</span
-        >
+        <span v-if="errorMessage && showErrorMessage" class="text-error text-xs pl-4">{{ errorMessage }}</span>
     </div>
 </template>

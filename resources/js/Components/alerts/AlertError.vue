@@ -1,5 +1,5 @@
 <script setup lang="js">
-import { ref, watchEffect } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 
 const props = defineProps({
     message: {
@@ -9,14 +9,20 @@ const props = defineProps({
 })
 
 const visible = ref(true);
+const localMessage = ref(props.message)
 
 const closeAlert = () => {
-    visible.value = false;
+    visible.value = false
+    localMessage.value = ''
 };
 
 watchEffect(() => {
-    visible.value = !!props.message;
+    if (localMessage.value == '' && props.message) {
+        localMessage.value = props.message;
+    }
+    visible.value = !!localMessage.value;
 });
+
 </script>
 
 <template>
@@ -27,7 +33,7 @@ watchEffect(() => {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <span class="text-xs">{{ message }}</span>
+        <span class="text-xs">{{ localMessage }}</span>
         <button @click="closeAlert" class="px-4 flex justify-center items-center">&times;</button>
     </div>
 </template>

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Password;
 
 class AuthController extends Controller
 {
@@ -41,7 +42,8 @@ class AuthController extends Controller
         return redirect()->route('verify.email.notice')->with('success', 'Registrasi berhasil, Cek email anda sekarang untuk verifikasi email.');
     }
 
-    public function verifyindex(){
+    public function verifyindex()
+    {
         return Inertia::render('Auth/VerifyEmail');
     }
 
@@ -53,9 +55,13 @@ class AuthController extends Controller
             return back()->with('info', 'Email Anda sudah diverifikasi.');
         }
 
-        $user->notify(new CustomEmailVerification());
+        try {
+            $user->notify(new CustomEmailVerification());
+            return back()->with('success', 'Email verifikasi telah dikirim ulang!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat mengirim email verifikasi, coba lagi nanti.']);
+        }
 
-        return back()->with('success', 'Email verifikasi telah dikirim ulang!');
     }
 
     public function verify(Request $request)
@@ -70,8 +76,77 @@ class AuthController extends Controller
             return redirect()->route('dashboard')->with('success', 'Verifikasi email berhasil!');
         }
 
-        return redirect()->route('verify.email.notice')->with('error', 'Verifikasi email gagal, mohon untuk coba request verifikasi baru.');
+        return redirect()->route('verify.email.notice')->withErrors(['error' => 'Verifikasi email gagal, mohon untuk coba request verifikasi baru.']);
     }
+
+    public function forgotIndex()
+    {
+        return Inertia::render('Auth/ForgotPassword');
+    }
+
+    public function forgotSend(Request $request)
+    {
+        $validatedData = $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $user = User::where('email', $validatedData['email'])->first();
+
+        if (!$user) {
+            return back()->withErrors(['error' => 'Alamat email ini tidak ada dalam catatan pengguna kami.']);
+        }
+
+        $status = Password::sendResetLink($validatedData);
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return back()->with('success', 'Link reset password telah dikirim ke email anda');
+        } elseif ($status === Password::RESET_THROTTLED) {
+            return back()->withErrors(['error' => 'Anda baru saja dikirimkan link reset password, mohon tunggu sebelum melakukan kirim ulang lagi']);
+        } else {
+            return back()->withErrors(['error' => 'Gagal mengirim link reset password, coba lagi nanti']);
+        }
+    }
+
+    public function resetPasswordIndex(Request $request)
+    {
+        $token = $request->query('token');
+        $email = $request->query('email');
+
+        return Inertia::render('Auth/ResetPassword', [
+            'token' => $token,
+            'email' => $email,
+        ]);
+
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validatedData = $request->validate(
+            [
+                'token' => 'required',
+                'email' => 'required|email',
+                'password' => 'required|string|min:8|confirmed',
+            ],
+            [
+                'password.min' => 'Password harus 8 karakter atau lebih'
+            ]
+        );
+
+        $status = Password::reset(
+            $validatedData,
+            function ($user, $password) {
+                $user->password = bcrypt($password);
+                $user->save();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('success', 'Password berhasil direset, silakan login.');
+        } else {
+            return back()->withErrors(['email' => __($status)]);
+        }
+    }
+
 
     public function login(LoginRequest $request)
     {

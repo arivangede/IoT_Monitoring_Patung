@@ -2,14 +2,16 @@
 import Alert from '@/Components/Alert.vue';
 import UserLayout from '@/Layouts/UserLayout.vue';
 import { Head, router, usePage } from '@inertiajs/vue3';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 
 const { props } = usePage();
-console.log(props)
 
 const state = reactive({
     logout_processing: false
 })
+
+const alertMessage = ref(props.flash.success || '')
+const alertType = ref(props.flash.success ? 'success' : '')
 
 // Function to handle logout
 const handleLogout = () => {
@@ -27,7 +29,7 @@ const handleLogout = () => {
 
     <Head title="Dashboard" />
     <UserLayout>
-        <Alert :alert-data="props.flash" />
+        <Alert :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />
 
         <div class="w-full flex justify-center items-center">
             <h1>Ini dashboard ya</h1>

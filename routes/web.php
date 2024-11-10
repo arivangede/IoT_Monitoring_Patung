@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     ->name('verify.email.request');
     Route::post('/verify-email/send-email', [AuthController::class, 'resendVerificationEmail'])
         ->name('verify.email.send');
+
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 });
 
@@ -31,4 +32,9 @@ Route::prefix('auth')->middleware('guest')->group(function () {
 
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
+    Route::get('/forgot-password', [AuthController::class, 'forgotIndex'])->name('forgot.password.index');
+    Route::post('/forgot-password', [AuthController::class, 'forgotSend'])->name('forgot.password.request');
+    Route::get('/reset-password', [AuthController::class, 'resetPasswordIndex'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });

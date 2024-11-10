@@ -1,22 +1,34 @@
 <script setup lang="js">
-import AlertError from "@/Components/alerts/AlertError.vue";
-import AlertSuccess from "@/Components/alerts/AlertSuccess.vue";
+import Alert from "@/Components/Alert.vue";
 import Card from "@/Components/Card.vue";
 import TextInput from "@/Components/form/TextInput.vue";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
 import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
+import { ref } from "vue";
 
-const { props } = usePage();
-console.log(props)
+const { props } = usePage()
 
 const form = useForm({
     email: "",
     password: ''
 })
 
+const alertMessage = ref(props.flash.success || '')
+const alertType = ref(props.flash.success ? 'success' : '')
+
 const submitForm = () => {
     form.post(route('login'), {
-        onError: () => {
+        onSuccess: (res) => {
+            if (res.props.flash.success) {
+                alertMessage.value = res.props.flash.success
+                alertType.value = 'success'
+            }
+        },
+        onError: (err) => {
+            if (err.error) {
+                alertMessage.value = err.error
+                alertType.value = 'error'
+            }
             form.reset('password')
         }
     })
@@ -28,9 +40,7 @@ const submitForm = () => {
 
     <Head title="Login" />
     <AuthLayout>
-        <AlertError v-if="form.errors.error" :message="form.errors.error" />
-        <AlertSuccess v-if="props.flash.success" :message="props.flash.success" />
-
+        <Alert :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />
         <Card :transparent="true">
             <form @submit.prevent="submitForm" class="flex flex-col justify-center items-center gap-5">
                 <h1 class="card-title">Login</h1>
@@ -39,6 +49,10 @@ const submitForm = () => {
                     :error="form.errors.error" :required="true" />
                 <TextInput type="password" icon="pi-lock" v-model="form.password" placeholder="Password"
                     :error="form.errors.error" :required="true" />
+                <div class="w-full flex justify-end items-center">
+                    <Link :href="route('forgot.password.index')" class="text-xs text-secondary underline">Lupa Password?
+                    </Link>
+                </div>
 
                 <div class="w-full flex items-center justify-center mt-4">
                     <button type="submit" class="btn btn-primary w-40" :disabled="form.processing">
