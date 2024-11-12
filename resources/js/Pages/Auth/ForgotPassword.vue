@@ -36,7 +36,12 @@ const sendResetPassword = () => {
     <GuestLayout>
 
         <Head title="Lupa Password" />
-        <Alert v-if="alertMessage" :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />
+
+        <div class="absolute top-2">
+            <Alert v-if="alertMessage" :message="alertMessage" :type="alertType"
+                @update:message="alertMessage = $event" />
+        </div>
+
         <Card>
             <h1 class="card-title">Lupa Password?</h1>
             <p>Tenang, kami akan kirimkan link reset password ke email anda.</p>

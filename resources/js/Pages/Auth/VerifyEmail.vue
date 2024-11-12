@@ -63,8 +63,9 @@ const backToLogin = () => {
     <Head title="Verify Email" />
 
     <GuestLayout>
-        <Alert :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />
-
+        <div class="absolute top-2">
+            <Alert :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />
+        </div>
         <Card>
             <h1 class="card-title">Verifikasi Email Anda</h1>
             <p class="text-sm">Mohon periksa kotak masuk email Anda. Jika belum menerima email, Anda dapat mengirim

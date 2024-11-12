@@ -40,7 +40,10 @@ const submitForm = () => {
 
     <Head title="Login" />
     <AuthLayout>
-        <Alert :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />
+        <div class="absolute top-2">
+            <Alert :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />
+        </div>
+
         <Card :transparent="true">
             <form @submit.prevent="submitForm" class="flex flex-col justify-center items-center gap-5">
                 <h1 class="card-title">Login</h1>
