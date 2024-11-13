@@ -37,9 +37,9 @@ watch(showMenus, (newValue) => {
 </script>
 
 <template>
-    <div class="navbar bg-base-300 md:bg-base-100 flex flex-col md:flex-row justify-between items-center md:px-20">
-        <div class="flex-1">
-            <a class="btn btn-ghost text-xl">Sistem Monitoring Patung</a>
+    <div class="navbar bg-base-200 md:bg-base-100 flex flex-col md:flex-row justify-between items-center md:px-20">
+        <div class="flex-1 p-4 md:p-0">
+            <Link :href="route('dashboard')" class="text-xl font-semibold">Sistem Monitoring Patung</Link>
         </div>
         <div class="flex-none">
             <div class="md:hidden flex flex-col items-center justify-center w-full">
