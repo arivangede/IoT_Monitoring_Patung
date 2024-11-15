@@ -44,7 +44,7 @@ const submitForm = () => {
             <Alert :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />
         </div>
 
-        <Card :transparent="true">
+        <Card :transparent="true" class="max-w-sm">
             <form @submit.prevent="submitForm" class="flex flex-col justify-center items-center gap-5">
                 <h1 class="card-title">Login</h1>
 

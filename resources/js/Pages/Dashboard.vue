@@ -1,36 +1,27 @@
 <script setup lang="js">
+import Card from '@/Components/Card.vue';
+import DustSensor from '@/Components/iot/DustSensor.vue';
+import TemperatureAndHumiditySensor from '@/Components/iot/TemperatureAndHumiditySensor.vue';
 import UserLayout from '@/Layouts/UserLayout.vue';
-import { Head, router, usePage } from '@inertiajs/vue3';
-import { reactive } from 'vue';
+import { Head, usePage } from '@inertiajs/vue3';
 
 const { props } = usePage();
-
-const state = reactive({
-    logout_processing: false
-})
-
-const handleLogout = () => {
-    state.logout_processing = true
-
-    router.post(route('logout'), {}, {
-        onFinish: () => {
-            state.logout_processing = false
-        }
-    });
-};
 </script>
 
 <template>
 
     <Head title="Dashboard" />
     <UserLayout>
-        <div class="w-full flex justify-center items-center">
-            <h1>dashboard page</h1>
-
-            <button class="btn btn-ghost" @click="handleLogout" :disabled="state.logout_processing">
-                <span class="loading loading-bars loading-md" v-if="state.logout_processing"></span>
-                <span v-else>Logout</span>
-            </button>
+        <div class="flex flex-col justify-center items-center p-0 sm:p-4 lg:p-20">
+            <Card class="w-full" custom-padding="p-4 sm:p-4 lg:p-8">
+                <div class="flex w-full justify-between sm:justify-center items-end gap-4 px-2">
+                    <TemperatureAndHumiditySensor />
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <DustSensor name="Sensor Debu 1" />
+                        <DustSensor name="Sensor Debu 2" />
+                    </div>
+                </div>
+            </Card>
         </div>
     </UserLayout>
 </template>

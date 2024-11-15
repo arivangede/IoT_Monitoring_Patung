@@ -31,7 +31,7 @@ const submit = () => {
     <GuestLayout>
 
         <Head title="Reset Password" />
-        <Card>
+        <Card class="max-w-sm">
             <h1 class="card-title">Atur Ulang Password</h1>
             <form @submit.prevent="submit" class="flex flex-col justify-center items-center gap-4 pt-4">
                 <TextInput icon="pi-envelope" v-model="form.email" :disabled="true" />

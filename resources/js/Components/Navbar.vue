@@ -70,12 +70,12 @@ watch(showMenus, (newValue) => {
                     </li>
                     <li>
                         <Link :href="route('notifications')" :class="{ 'text-primary': routeName === 'notifications' }">
-                        Notifications
+                        Notifikasi
                         </Link>
                     </li>
                     <li>
                         <Link :href="route('user-settings')" :class="{ 'text-primary': routeName === 'settings' }">
-                        Settings
+                        Pengaturan
                         </Link>
                     </li>
                 </ul>
@@ -90,12 +90,12 @@ watch(showMenus, (newValue) => {
                 </li>
                 <li>
                     <Link :href="route('notifications')" :class="{ 'text-primary': routeName === 'notifications' }">
-                    Notifications
+                    Notifikasi
                     </Link>
                 </li>
                 <li>
                     <Link :href="route('user-settings')" :class="{ 'text-primary': routeName === 'settings' }">
-                    Settings
+                    Pengaturan
                     </Link>
                 </li>
             </ul>

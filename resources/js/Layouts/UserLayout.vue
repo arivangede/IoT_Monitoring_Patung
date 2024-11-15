@@ -12,7 +12,7 @@ const alertType = ref(props.flash.success ? 'success' : '')
 
 <template>
     <div class="min-h-screen w-full flex flex-col items-center">
-        <div class="fixed top-0 w-full">
+        <div class="fixed top-0 w-full z-50">
             <Navbar />
             <div class="absolute top-full mt-2 md:mt-0 w-full px-4 flex justify-center md:justify-end items-center">
                 <Alert :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />

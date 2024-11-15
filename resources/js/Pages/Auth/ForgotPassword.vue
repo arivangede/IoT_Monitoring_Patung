@@ -42,7 +42,7 @@ const sendResetPassword = () => {
                 @update:message="alertMessage = $event" />
         </div>
 
-        <Card>
+        <Card class="max-w-sm">
             <h1 class="card-title">Lupa Password?</h1>
             <p>Tenang, kami akan kirimkan link reset password ke email anda.</p>
             <form @submit.prevent="sendResetPassword" class="flex justify-center items-center gap-2 pt-4">

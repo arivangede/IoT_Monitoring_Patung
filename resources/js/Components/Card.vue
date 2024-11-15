@@ -3,13 +3,17 @@ const props = defineProps({
     transparent: {
         type: Boolean,
         default: false
+    },
+    customPadding: {
+        type: String,
+        default: ''
     }
 })
 </script>
 <template>
-    <div :class="`card w-full shadow-xl max-w-sm bg-base-300 ${transparent && 'bg-opacity-60'
+    <div :class="`card w-full shadow-xl bg-base-300 ${transparent && 'bg-opacity-60'
         }`">
-        <div class="card-body">
+        <div :class="`card-body ${customPadding}`">
             <slot />
         </div>
     </div>

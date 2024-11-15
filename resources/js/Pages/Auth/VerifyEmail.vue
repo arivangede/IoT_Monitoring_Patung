@@ -66,7 +66,7 @@ const backToLogin = () => {
         <div class="absolute top-2">
             <Alert :message="alertMessage" :type="alertType" @update:message="alertMessage = $event" />
         </div>
-        <Card>
+        <Card class="max-w-sm">
             <h1 class="card-title">Verifikasi Email Anda</h1>
             <p class="text-sm">Mohon periksa kotak masuk email Anda. Jika belum menerima email, Anda dapat mengirim
                 ulang verifikasi.</p>
