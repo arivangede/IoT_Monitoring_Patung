@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/all-temperature-data', [IoTController::class, 'getAllTemperatureData']);
+Route::post('/sensors', [IoTController::class, 'store'])->name('post.sensors');

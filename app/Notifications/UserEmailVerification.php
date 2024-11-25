@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 
-class CustomEmailVerification extends Notification
+class UserEmailVerification extends Notification
 {
     public function via($notifiable)
     {
