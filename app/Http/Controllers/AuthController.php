@@ -36,7 +36,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        $user->sendCustomEmailVerificationNotification();
+        $user->sendEmailVerificationNotification();
 
         // Redirect ke login
         return redirect()->route('verify.email.notice')->with('success', 'Registrasi berhasil, Cek email anda sekarang untuk verifikasi email.');

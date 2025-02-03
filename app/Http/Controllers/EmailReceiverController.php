@@ -8,6 +8,7 @@ use App\Models\EmailReceiver;
 use App\Notifications\NotificationEmailVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 class EmailReceiverController extends Controller
@@ -86,7 +87,7 @@ class EmailReceiverController extends Controller
         }
 
         // Mengirimkan email verifikasi ulang
-        Mail::to($receiver->email_address)->send(new VerificationEmail($receiver));
+        Notification::route('mail', $receiver->email_address)->notify(new NotificationEmailVerification($receiver));
 
         // Menyimpan history email
         EmailHistory::create([

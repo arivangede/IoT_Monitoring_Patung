@@ -15,4 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// store sensor data route api
 Route::post('/sensors', [IoTController::class, 'store'])->name('post.sensors');

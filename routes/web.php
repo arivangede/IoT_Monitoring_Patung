@@ -16,10 +16,9 @@ Route::get('/', function () {
 // Route for sensors
 Route::get('/sensors', [IoTController::class, 'getCurrentSensorsData'])->name('sensors.current.data');
 Route::get('/sensors/all', [IoTController::class, 'getAllSensorsData'])->name('sensors.all.data');
-
 Route::get('/email-receivers/verify-email/{id}/{hash}', [EmailReceiverController::class, 'verifyEmail'])->name('email.receiver.verify');
 
-// Route protected by auth and verify middleware
+// Route for pages
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/notifications', [NotificationsController::class, 'index'])->name('notifications');
@@ -36,7 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/user-settings/delete-account/{id}', [UserSettingsController::class, 'delete_account'])->name('user.delete.account');
 });
 
-// Route protected by auth middleware
+// Route for verify user email and logout
 Route::middleware('auth')->group(function () {
     Route::get('/verify-email', [AuthController::class, 'verifyindex'])->name('verify.email.notice');
     Route::get('/verify-email/{id}/{hash}', [AuthController::class, 'verify'])
@@ -48,7 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 });
 
-// Auth routes for login, register, and logout
+// Auth routes for login, register, forgot password
 Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);

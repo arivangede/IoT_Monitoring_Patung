@@ -25,7 +25,7 @@ const props = defineProps({
                 <span class="loading loading-bars loading-md"></span>
             </template>
             <template v-else>
-                <AnimatedNumber :value="data" :duration="2000" uom="µg/m³" />
+                <AnimatedNumber :value="data" :duration="2000" uom="mg/m³" />
             </template>
             <span class="text-sm">(mikrogram)</span>
         </div>

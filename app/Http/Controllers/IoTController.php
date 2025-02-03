@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Command;
-use App\Models\DustSensor;
 use App\Models\Iot;
-use App\Models\TemperatureSensor;
+use App\Services\DustAlertService;
 use Illuminate\Http\Request;
 
 class IoTController extends Controller
 {
+    protected $dustAlertService;
+
+    public function __construct(DustAlertService $dustAlertService)
+    {
+        $this->dustAlertService = $dustAlertService;
+    }
+
+    // method for api route
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -26,9 +32,19 @@ class IoTController extends Controller
             'humidity' => $validated['humidity'],
         ]);
 
+        // Cek dan kirim email
+        $lastRun = cache('dust_alert_last_run');
+        $currentHour = now()->subHour()->format('Y-m-d H:00:00');
+
+        if (!$lastRun || $lastRun < $currentHour) {
+            $this->dustAlertService->checkAndSendEmail();
+            cache(['dust_alert_last_run' => $currentHour], now()->addHour());
+        }
+
         return response()->json(['Data sensors successfully stored']);
     }
 
+    // method for website to display current/latest sensor data
     public function getCurrentSensorsData()
     {
         $sensorsData = Iot::latest()->first();
@@ -36,14 +52,15 @@ class IoTController extends Controller
         return response()->json($sensorsData);
     }
 
+    // method for get all sensor data and filter minute, hours, days function
     public function getAllSensorsData(Request $request)
     {
-        // Ambil filter berdasarkan menit, jam, atau hari dari query parameter
-        $filter = $request->query('filter', 'jam'); // Default ke 'jam' jika tidak ada filter
+        // get filter from query params
+        $filter = $request->query('filter', 'jam'); // default data by hours when filter is null
         $iotQuery = Iot::query();
 
         if ($filter === 'menit') {
-            // Grup berdasarkan menit
+            // group data by minutes
             $sensorsData = $iotQuery
                 ->selectRaw('DATE_FORMAT(created_at, "%Y-%m-%d %H:%i:00") as time_group, 
                          AVG(temperature) as temperature, 
@@ -54,7 +71,7 @@ class IoTController extends Controller
                 ->orderBy('time_group', 'desc')
                 ->get();
         } elseif ($filter === 'jam') {
-            // Grup berdasarkan jam
+            // group data by hours
             $sensorsData = $iotQuery
                 ->selectRaw('DATE_FORMAT(created_at, "%Y-%m-%d %H:00:00") as time_group, 
                          AVG(temperature) as temperature, 
@@ -65,7 +82,7 @@ class IoTController extends Controller
                 ->orderBy('time_group', 'desc')
                 ->get();
         } elseif ($filter === 'hari') {
-            // Grup berdasarkan hari
+            // group data by days
             $sensorsData = $iotQuery
                 ->selectRaw('DATE(created_at) as time_group, 
                          AVG(temperature) as temperature, 
@@ -76,7 +93,7 @@ class IoTController extends Controller
                 ->orderBy('time_group', 'desc')
                 ->get();
         } else {
-            // Tetap mengembalikan data dengan time_group tetapi tanpa pengelompokan
+            // return all data when filter selected to be "all"
             $sensorsData = $iotQuery
                 ->selectRaw('created_at as time_group, 
                          temperature, 

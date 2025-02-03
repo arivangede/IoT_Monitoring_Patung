@@ -3,16 +3,13 @@
 namespace App\Notifications;
 
 use App\Models\EmailReceiver;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 
-class NotificationEmailVerification extends Notification implements ShouldQueue
+class NotificationEmailVerification extends Notification
 {
-    use Queueable;
 
     protected $receiver;
 
