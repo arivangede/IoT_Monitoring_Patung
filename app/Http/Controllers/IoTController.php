@@ -32,14 +32,11 @@ class IoTController extends Controller
             'humidity' => $validated['humidity'],
         ]);
 
-        // Cek dan kirim email
-        $lastRun = cache('dust_alert_last_run');
-        $currentHour = now()->subHour()->format('Y-m-d H:00:00');
 
-        if (!$lastRun || $lastRun < $currentHour) {
-            $this->dustAlertService->checkAndSendEmail();
-            cache(['dust_alert_last_run' => $currentHour], now()->addHour());
-        }
+
+
+        $this->dustAlertService->checkAndSendEmail();
+
 
         return response()->json(['Data sensors successfully stored']);
     }
