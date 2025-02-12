@@ -20,8 +20,12 @@ class DustAlertService
         $averageDust1 = $readings->avg('dust_1');
         $averageDust2 = $readings->avg('dust_2');
 
+        // Format nilai rata-rata menjadi 2 angka di belakang koma
+        $formattedAverageDust1 = number_format($averageDust1, 2);
+        $formattedAverageDust2 = number_format($averageDust2, 2);
+
         // Threshold
-        $threshold = 1.0;
+        $threshold = 1.00;
 
         // Cek apakah salah satu atau kedua sensor melebihi threshold
         if ($averageDust1 > $threshold || $averageDust2 > $threshold) {
@@ -36,13 +40,13 @@ class DustAlertService
             // Cek dan kirim notifikasi untuk dust_1
             if ($averageDust1 > $threshold && (!$lastRun || $lastRun < $currentHour)) {
                 Notification::route('mail', $emails)
-                    ->notify(new DustAlertNotification('Sensor Dust 1', $averageDust1));
+                    ->notify(new DustAlertNotification('Sensor Dust 1', $formattedAverageDust1));
 
                 foreach ($receivers as $receiver) {
                     EmailHistory::create([
                         'email_receiver_id' => $receiver->id,
                         'title' => "Notifikasi Debu Sensor Dust 1",
-                        'text' => "Sensor Dust 1 dalam 1 jam terakhir mendapatkan nilai rata-rata {$averageDust1} mg/m³, dimana threshold adalah 1.0 mg/m³",
+                        'text' => "Sensor Dust 1 dalam 1 jam terakhir mendapatkan nilai rata-rata {$formattedAverageDust1} mg/m³, dimana threshold adalah {$threshold} mg/m³",
                         'status' => 'Terkirim',
                     ]);
                 }
@@ -51,13 +55,13 @@ class DustAlertService
             // Cek dan kirim notifikasi untuk dust_2
             if ($averageDust2 > $threshold && (!$lastRun || $lastRun < $currentHour)) {
                 Notification::route('mail', $emails)
-                    ->notify(new DustAlertNotification('Sensor Dust 2', $averageDust2));
+                    ->notify(new DustAlertNotification('Sensor Dust 2', $formattedAverageDust2));
 
                 foreach ($receivers as $receiver) {
                     EmailHistory::create([
                         'email_receiver_id' => $receiver->id,
                         'title' => "Notifikasi Debu Sensor Dust 2",
-                        'text' => "Sensor Dust 2 dalam 1 jam terakhir mendapatkan nilai rata-rata {$averageDust2} mg/m³, dimana threshold adalah 1.0 mg/m³",
+                        'text' => "Sensor Dust 2 dalam 1 jam terakhir mendapatkan nilai rata-rata {$formattedAverageDust2} mg/m³, dimana threshold adalah {$threshold} mg/m³",
                         'status' => 'Terkirim',
                     ]);
                 }

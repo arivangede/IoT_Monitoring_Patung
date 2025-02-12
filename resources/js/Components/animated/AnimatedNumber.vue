@@ -1,6 +1,7 @@
 <script setup lang="js">
 import { ref, watch, onMounted } from 'vue';
 import anime from 'animejs';
+import formatNumber from '@/utils/formatNumber';
 
 const props = defineProps({
     value: {
@@ -42,5 +43,6 @@ onMounted(() => {
 });
 </script>
 <template>
-    <span class="text-xl md:text-3xl font-semibold">{{ animatedValue }}{{ uom }}</span>
+    <span class="text-xl md:text-3xl font-semibold">{{ formatNumber(animatedValue, uom == "mg/m³" ? 2 : 1) }}{{ uom
+        }}</span>
 </template>

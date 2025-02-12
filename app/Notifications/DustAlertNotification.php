@@ -39,7 +39,7 @@ class DustAlertNotification extends Notification
             ->subject("Peringatan: Rata-rata Debu Melebihi Threshold ({$this->sensorName})")
             ->greeting('Peringatan!')
             ->line("Rata-rata nilai debu dari {$this->sensorName} dalam 1 jam terakhir adalah: {$this->averageDust} mg/m³.")
-            ->line("Nilai ini melebihi batas threshold yang ditentukan (1.0 mg/m³), mohon untuk melakukan pengecekan pada kebersihan bilik " . $this->getCompartmentNumber($this->sensorName) . ".");
+            ->line("Nilai ini melebihi batas threshold yang ditentukan (1.00 mg/m³), mohon untuk melakukan pengecekan pada kebersihan bilik " . $this->getCompartmentNumber($this->sensorName) . ".");
     }
 
     private function getCompartmentNumber($sensorName)

@@ -66,8 +66,8 @@ const prevPage = () => {
                     <tr v-for="(item, index) in paginatedData" :key="index">
                         <td>{{ formatNumber(item.temperature) }}</td>
                         <td>{{ formatNumber(item.humidity) }}</td>
-                        <td>{{ formatNumber(item.dust_1) }}</td>
-                        <td>{{ formatNumber(item.dust_2) }}</td>
+                        <td>{{ formatNumber(item.dust_1, 2) }}</td>
+                        <td>{{ formatNumber(item.dust_2, 2) }}</td>
                         <td>{{ formatDate(item.time_group, hideTime ? "D MMM YYYY" : "D MMM YYYY HH:mm:ss") }}</td>
                     </tr>
                 </template>

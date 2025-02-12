@@ -94,11 +94,13 @@ watch(() => state.dataDisplay, (newFilter) => {
         <div class="flex flex-col justify-center items-center mt-40 md:mt-0 p-0 gap-4 sm:p-4 lg:p-20">
             <Card custom-padding="p-4 sm:p-4 lg:p-8">
                 <div class="flex w-full justify-center items-end gap-4 px-2">
-                    <TemperatureAndHumiditySensor :loading="state.loadingCurrentSensors"
+                    <TemperatureAndHumiditySensor :loading="state.loadingCurrentSensorsData"
                         :temperature="state.temperature" :humidity="state.humidity" />
                     <div class="flex flex-col sm:flex-row gap-2">
-                        <DustSensor name="Sensor Debu 1" :data="state.dust_1" :loading="state.loadingCurrentSensors" />
-                        <DustSensor name="Sensor Debu 2" :data="state.dust_2" :loading="state.loadingCurrentSensors" />
+                        <DustSensor name="Sensor Debu 1" :data="state.dust_1"
+                            :loading="state.loadingCurrentSensorsData" />
+                        <DustSensor name="Sensor Debu 2" :data="state.dust_2"
+                            :loading="state.loadingCurrentSensorsData" />
                     </div>
                 </div>
             </Card>
