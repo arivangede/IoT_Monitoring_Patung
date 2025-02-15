@@ -38,7 +38,7 @@ defineProps({
                         <span class="loading loading-bars loading-md"></span>
                     </template>
                     <template v-else>
-                        <AnimatedNumber :value="humidity" :duration="2000" uom="RH" />
+                        <AnimatedNumber :value="humidity" :duration="2000" uom="%" />
                     </template>
                     <span>Kelembaban</span>
                 </div>
